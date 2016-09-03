@@ -1,4 +1,5 @@
 #-*- encoding: utf-8 -*-
+
 import os
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
@@ -20,14 +21,14 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME']:
-            error = '用户名或密码不正确'
+            error = u'用户名或密码不正确'
         elif request.form['password'] != app.config['PASSWORD']:
-            error = '用户名或密码不正确'
+            error = u'用户名或密码不正确'
         else:
             session['logged_in'] = True
             flash('You were logged in')
@@ -35,7 +36,7 @@ def login():
     return render_template('login.html', error=error)
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
