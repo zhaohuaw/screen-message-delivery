@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-<p id="message">
-  hello world
+<p id="content">
 </p>
 {% endblock %}
 
@@ -15,9 +14,14 @@ $(document).ready(function(){
       url: "/ajax/get/update/",
       dataType: "json",
       success: function( data ){
-        var layout = data['layout'];
-        $('body').removeClass().addClass('bg_layout_' + layout);
-        $('#message').text(data['message']);
+        if(!data['error']){
+          var layout = data['layout'];
+          console.log('layout is ', layout);
+          if(layout=='layout1') {
+            var image = data['image'];
+            $('body').css('background-image', 'url(' + image + ')').css("background-repeat", "no-repeat");
+          }
+        }
       }
     });
   }

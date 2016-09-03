@@ -5,7 +5,7 @@
 <div class="row">
     <p class="col-md-12 center-block text-center">
     {% if session['logged_in'] == True %}
-      <a class="btn btn-danger btn-lg" href="{{ url_for('login') }}">去发布内容</a>
+      <a class="btn btn-danger btn-lg" href="{{ url_for('delivery_choices') }}">去发布内容</a>
     {% else %}
       <a class="btn btn-danger btn-lg" href="{{ url_for('login') }}">登录发布系统</a>
     {% endif %}
