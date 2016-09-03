@@ -110,7 +110,8 @@ def delivery_layout1():
                     #filename = secure_filename(file.filename)
                     filename = file.filename
                     # new random filename
-                    save_to = str(time.time()) + file_ext(filename)
+                    save_to = "{0}.{1}".format(str(time.time()),
+                            file_ext(filename))
                     save_to = os.path.join(file_folder, save_to)
 
                     file.save(save_to)
