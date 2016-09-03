@@ -1,6 +1,8 @@
 #-*- encoding: utf-8 -*-
 
 import os
+import json
+import random
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
                 render_template, flash
@@ -20,6 +22,18 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
+@app.route('/ajax/get/update/')
+def ajax_update():
+    ret = {
+        'layout': 'red',
+        'message': random.choice(['aaaa', 'bbbb','cccc'])
+    }
+    return json.dumps(ret)
+
+@app.route('/detail/')
+def detail():
+    return render_template('detail.html')
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():

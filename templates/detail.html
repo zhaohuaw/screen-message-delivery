@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block body %}
+<p id="message">
+  hello world
+</p>
+{% endblock %}
+
+{% block page_scripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+  
+  function update()
+  {
+    $.ajax({
+      url: "/ajax/get/update/",
+      dataType: "json",
+      success: function( data ){
+        var layout = data['layout'];
+        $('body').removeClass().addClass('bg_layout_' + layout);
+        $('#message').text(data['message']);
+      }
+    });
+  }
+
+  update();
+  setInterval(update, 3000);
+});
+</script>
+{% endblock %}
