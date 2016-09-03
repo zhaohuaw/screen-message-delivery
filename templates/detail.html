@@ -7,6 +7,8 @@
 {% block page_scripts %}
 <script type="text/javascript">
 $(document).ready(function(){
+
+  var APPLYEDLAYOUT = {'layout': '', 'image': ''};
   
   function update()
   {
@@ -19,7 +21,10 @@ $(document).ready(function(){
           console.log('layout is ', layout);
           if(layout=='layout1') {
             var image = data['image'];
-            $('body').css('background-image', 'url(' + image + ')').css("background-repeat", "no-repeat");
+            if ((layout!=APPLYEDLAYOUT['layout'] || image!=APPLYEDLAYOUT['image']))
+              APPLYEDLAYOUT['layout'] = layout;
+              APPLYEDLAYOUT['image'] = image;
+              $('body').css('background-image', 'url(' + image + ')').css("background-repeat", "no-repeat");
           }
         }
       }
