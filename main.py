@@ -26,11 +26,13 @@ app.config.from_object(__name__)
 # Load default config and override config from an environment variable
 app.config.update(dict(
     SECRET_KEY='sfas90aua#F31#$@wqERQW',
-    USERNAME='admin',
-    PASSWORD='87238136',
+    USERNAME='username',
+    PASSWORD='password',
     UPLOAD_FOLDER=UPLOAD_FOLDER,
 ))
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+app.config.from_envvar('SECRET_KEY', silent=True)
+app.config.from_envvar('USERNAME', silent=True)
+app.config.from_envvar('PASSWORD', silent=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
