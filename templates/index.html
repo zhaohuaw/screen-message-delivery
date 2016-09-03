@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+<h1 class="bg-info center-block text-center" style="margin-bottom: 30px;">大屏消息分发系统</h1>
+
+<div class="row">
+    <p class="col-md-12 center-block text-center">
+      <a class="btn btn-danger btn-lg" href="{{ url_for('login') }}">登录发布系统</a>
+    </p>
+</div>
+
+<div class="row">
+    <p class="col-md-12 center-block text-center">
+      <a class="btn btn-info btn-lg" href="{{ url_for('login') }}">预览大屏内容</a>
+    </p>
+</div>
+{% endblock %}

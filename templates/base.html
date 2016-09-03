@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>大屏消息分发系统</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='bootstrap-3.3.0.min.css') }}">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      {% block body %}
+      <div class=page>
+      <h1>大屏消息分发系统</h1>
+      <div class=metanav>
+      {% if not session.logged_in %}
+        <a href="{{ url_for('login') }}">登录系统</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">退出</a>
+      {% endif %}
+      </div>
+      {% endblock %}
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-3.3.0.min.js') }}"></script>
+    {% block page_scripts %}
+    {% endblock %}
+  </body>
+</html>
+
+</div>

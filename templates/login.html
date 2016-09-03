@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<h2 class="primary-text">登录</h2>
+
+<div class="row">
+  <form class="form-horizontal" action="{{ url_for('login') }}" method="POST">
+    <div class="form-body">
+      {% if error %}
+      <div class="form-group">
+        <label class=col-md-12 text-error">{{ error }}</label>
+      </div>
+      {% endif %}
+      <div class="form-group">
+        <label class="col-md-3 control-label">用户名</label>
+        <div class="col-md-9">
+         <input type="text" class="form-control" name="username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-3 control-label">密码</label>
+        <div class="col-md-9">
+         <input type="password" class="form-control" name="password">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn green">登录</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}
