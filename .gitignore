@@ -63,3 +63,4 @@ staticfiles/
 # Hitch directory
 tests/.hitch
 
+static/uploads/

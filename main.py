@@ -2,7 +2,7 @@
 
 import os
 import json
-import random
+import time
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
                 render_template, flash
@@ -10,10 +10,10 @@ from werkzeug.utils import secure_filename
 from werkzeug.contrib.cache import SimpleCache
 
 UPLOAD_FOLDER = 'static/uploads/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'png', 'jpg', 'jpeg', 'gif'])
 
 def file_ext(filename):
-    return filename.rsplit('.', 1)[1]
+    return filename.rsplit('.', 1)[1].lower()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -101,10 +101,18 @@ def delivery_layout1():
                 error = u'请指定背景图片'
             else:
                 if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    save_to = 'bg.' + file_ext(filename)
-                    save_to = os.path.join(app.config['UPLOAD_FOLDER'],
-                                        'layout1', save_to)
+                    file_folder = os.path.join(app.config['UPLOAD_FOLDER'],
+                            'layout1')
+                    # remove old files
+                    for fn in os.listdir(file_folder):
+                        os.remove(os.path.join(file_folder, fn))
+
+                    #filename = secure_filename(file.filename)
+                    filename = file.filename
+                    # new random filename
+                    save_to = str(time.time()) + file_ext(filename)
+                    save_to = os.path.join(file_folder, save_to)
+
                     file.save(save_to)
 
                     flash(u'文件上传成功。')
