@@ -14,14 +14,33 @@
 
 ## 运行环境
 + 运行硬件：显示器大屏 + Raspberry Pi
-+ 软件环境：Raspbian + Python2.7 + Flask 0.11.1 + 
++ 软件环境：Raspbian + Python2.7 + Flask 0.11.1 + Chromium
 
 
 ## 安装
 
 + 安装 Virtualenv
 + git clone 源码
++ chmod a+x startup.sh
 + 运行 startup.sh
++ 如果要开机自动启动，在 Rasbian LXDE 系统中：
+
+```sh
+$ sudo vi /etc/xdg/lxsession/LXDE-pi/autostart
+```
+
+然后将启动脚本添加进去，如下：
+
+```conf
+@lxpanel --profile LXDE
+@pcmanfm --desktop --profile LXDE
+@lxterminal
+@leafpad
+@xscreensaver -no-splash@
+@bash /home/pi/workspace/screen-message-delivery/startup.sh
+```
+
+或者也可以将启动脚本添加到 `~/.config/lxsessionn/LXDE/autostart` 文件中。
 
 
 ## 运行情况
