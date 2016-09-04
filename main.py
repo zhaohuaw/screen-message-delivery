@@ -118,10 +118,27 @@ def delivery_layout1():
 
                     flash(u'文件上传成功。')
                     # save the config to a file and then store to cache
-                    d = {'layout': 'layout1', 'image': '/' + save_to}
+                    d = {'layout': 'layout1', 'data': '/' + save_to}
                     with open('delivery.json', 'w') as config_file:
                         json.dump(d, config_file)
                     cache = SimpleCache()
                     cache.set('layout', d)
                     return redirect(url_for('detail'))
     return render_template('delivery_layout1.html', error=error)
+
+# 自动从指定网站上下载多个图片内容
+@app.route('/delivery/layout2/', methods=['GET', 'POST'])
+def delivery_layout2():
+    error = None
+    if not session['logged_in']:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        d = {'layout': 'layout2', 'data': {'tag': '', 'images': []}}
+        with open('delivery.json', 'w') as config_file:
+            json.dump(d, config_file)
+        cache = SimpleCache()
+        cache.set('layout', d)
+        return redirect(url_for('detail'))
+    return render_template('delivery_layout2.html', error=error)
