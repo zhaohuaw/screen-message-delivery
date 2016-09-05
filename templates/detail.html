@@ -1,13 +1,5 @@
 {% extends "base.html" %}
 {% block body %}
-<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1300px; height: 620px;">
-    <!-- Slides Container -->
-    <div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 1300px; height: 620px;">
-        <div><img u="image" src="/static/uploads/layout2/01.jpg" /></div>
-        <div><img u="image" src="/static/uploads/layout2/02.jpg" /></div>
-        <div><img u="image" src="/static/uploads/layout2/03.jpg" /></div>
-    </div>
-</div>
 {% endblock %}
 
 {% block page_scripts %}
@@ -21,13 +13,63 @@ $(document).ready(function(){
     layout1: function(data) {
         var image = data['data'];
         if (('layout1'!=APPLYEDLAYOUT['layout'] || image!=APPLYEDLAYOUT['data'])) {
-          APPLYEDLAYOUT['layout'] = layout;
+          APPLYEDLAYOUT['layout'] = 'layout1';
           APPLYEDLAYOUT['data'] = image;
           $('#content').empty();
           $('body').css('background-image', 'url(' + image + ')').css("background-repeat", "no-repeat");
         }
-    }
+    },
+    layout2: function(data) {
+        //slider show
+        //Define an array of slideshow transition code
+        var data = data['data'];
+        var tag = data['tag'];
+        var images = data['images'];
+        if (('layout2'!=APPLYEDLAYOUT['layout'] || tag!=APPLYEDLAYOUT['data'])) {
+          $('body').css('background-image', ''); //reset
+          APPLYEDLAYOUT['layout'] = 'layout2';
+          APPLYEDLAYOUT['data'] = tag;
+
+          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1300px; height: 620px;">'];
+          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 1300px; height: 620px;">');
+          for(var i=0,len=images.length; i<len; i++) {
+            html_arr.push('<div><img u="image" src="');
+            html_arr.push(images[i]);
+            html_arr.push('" /></div>');
+          }
+          html_arr.push('</div></div>');
+
+          $('#content').empty().html(html_arr.join(''));
+
+          var _SlideshowTransitions = [
+              {$Duration:1200,y:-0.3,$SlideOut:true,$Easing:{$Top:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseLinear},$Opacity:2},
+              {$Duration:1200,x:0.3,y:0.3,$Cols:2,$Rows:2,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$ChessMode:{$Column:3,$Row:12},$Easing:{$Left:$JssorEasing$.$EaseInCubic,$Top:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseLinear},$Opacity:2},
+              {$Duration:1200,x:0.2,y:-0.1,$Delay:20,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Formation:$JssorSlideshowFormations$.$FormationStraightStairs,$Easing:{$Left:$JssorEasing$.$EaseInWave,$Top:$JssorEasing$.$EaseInWave,$Clip:$JssorEasing$.$EaseOutQuad},$Assembly:260,$Outside:true,$Round:{$Left:1.3,$Top:2.5}},
+              {$Duration:1200,x:0.2,y:-0.1,$Delay:20,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Formation:$JssorSlideshowFormations$.$FormationSwirl,$Easing:{$Left:$JssorEasing$.$EaseInWave,$Top:$JssorEasing$.$EaseInWave,$Clip:$JssorEasing$.$EaseOutQuad},$Assembly:260,$Outside:true,$Round:{$Left:1.3,$Top:2.5}},{$Duration:1500,x:0.3,y:-0.3,$Delay:80,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Easing:{$Left:$JssorEasing$.$EaseInJump,$Top:$JssorEasing$.$EaseInJump,$Clip:$JssorEasing$.$EaseOutQuad},$Outside:true,$Round:{$Left:0.8,$Top:2.5}},
+              {$Duration:1800,x:1,y:0.2,$Delay:30,$Cols:10,$Rows:5,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Reverse:true,$Formation:$JssorSlideshowFormations$.$FormationStraightStairs,$Easing:{$Left:$JssorEasing$.$EaseInOutSine,$Top:$JssorEasing$.$EaseOutWave,$Clip:$JssorEasing$.$EaseInOutQuad},$Assembly:2050,$Outside:true,$Round:{$Top:1.3}},
+              {$Duration:1200,x:-4,y:4,$Zoom:11,$Rotate:1,$Easing:{$Left:$JssorEasing$.$EaseInCubic,$Top:$JssorEasing$.$EaseInCubic,$Zoom:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseOutQuad,$Rotate:$JssorEasing$.$EaseInCubic},$Opacity:2,$Round:{$Rotate:0.7}},
+              {$Duration:1200,x:0.5,$Cols:2,$Zoom:1,$SlideOut:true,$ChessMode:{$Column:15},$Easing:{$Left:$JssorEasing$.$EaseInExpo,$Zoom:$JssorEasing$.$EaseInExpo,$Opacity:$JssorEasing$.$EaseLinear},$Assembly:2049,$Opacity:2},
+              {$Duration:500,$Delay:30,$Cols:8,$Rows:4,$Clip:15,$SlideOut:true,$Formation:$JssorSlideshowFormations$.$FormationZigZag,$Easing:$JssorEasing$.$EaseOutQuad}
+          ];
+
+          var options = {
+              $AutoPlay: true,
+              $SlideshowOptions: {
+                $Class: $JssorSlideshowRunner$,
+                $Transitions: _SlideshowTransitions,
+                $TransitionsOrder: 0, // random
+                $ShowLink: false,
+                $Idle: 10000,
+                $PauseOnHover: 0,
+                $ArrowKeyNavigation: 0
+              }
+          };
+
+          var jssor_slider1 = new $JssorSlider$('slider1_container', options);
+        }
+      }
   };
+
   function update()
   {
     $.ajax({
@@ -47,32 +89,6 @@ $(document).ready(function(){
 
   update();
   setInterval(update, 3000);
-
-  //slider show
-  //Define an array of slideshow transition code
-  var _SlideshowTransitions = [
-    {$Duration:1200,y:-0.3,$SlideOut:true,$Easing:{$Top:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseLinear},$Opacity:2},
-    {$Duration:1200,x:0.3,y:0.3,$Cols:2,$Rows:2,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$ChessMode:{$Column:3,$Row:12},$Easing:{$Left:$JssorEasing$.$EaseInCubic,$Top:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseLinear},$Opacity:2},
-    {$Duration:1200,x:0.2,y:-0.1,$Delay:20,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Formation:$JssorSlideshowFormations$.$FormationStraightStairs,$Easing:{$Left:$JssorEasing$.$EaseInWave,$Top:$JssorEasing$.$EaseInWave,$Clip:$JssorEasing$.$EaseOutQuad},$Assembly:260,$Outside:true,$Round:{$Left:1.3,$Top:2.5}},
-    {$Duration:1200,x:0.2,y:-0.1,$Delay:20,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Formation:$JssorSlideshowFormations$.$FormationSwirl,$Easing:{$Left:$JssorEasing$.$EaseInWave,$Top:$JssorEasing$.$EaseInWave,$Clip:$JssorEasing$.$EaseOutQuad},$Assembly:260,$Outside:true,$Round:{$Left:1.3,$Top:2.5}},{$Duration:1500,x:0.3,y:-0.3,$Delay:80,$Cols:8,$Rows:4,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Easing:{$Left:$JssorEasing$.$EaseInJump,$Top:$JssorEasing$.$EaseInJump,$Clip:$JssorEasing$.$EaseOutQuad},$Outside:true,$Round:{$Left:0.8,$Top:2.5}},
-  {$Duration:1800,x:1,y:0.2,$Delay:30,$Cols:10,$Rows:5,$Clip:15,$During:{$Left:[0.3,0.7],$Top:[0.3,0.7]},$Reverse:true,$Formation:$JssorSlideshowFormations$.$FormationStraightStairs,$Easing:{$Left:$JssorEasing$.$EaseInOutSine,$Top:$JssorEasing$.$EaseOutWave,$Clip:$JssorEasing$.$EaseInOutQuad},$Assembly:2050,$Outside:true,$Round:{$Top:1.3}},
-  {$Duration:1200,x:-4,y:4,$Zoom:11,$Rotate:1,$Easing:{$Left:$JssorEasing$.$EaseInCubic,$Top:$JssorEasing$.$EaseInCubic,$Zoom:$JssorEasing$.$EaseInCubic,$Opacity:$JssorEasing$.$EaseOutQuad,$Rotate:$JssorEasing$.$EaseInCubic},$Opacity:2,$Round:{$Rotate:0.7}},
-  {$Duration:1200,x:0.5,$Cols:2,$Zoom:1,$SlideOut:true,$ChessMode:{$Column:15},$Easing:{$Left:$JssorEasing$.$EaseInExpo,$Zoom:$JssorEasing$.$EaseInExpo,$Opacity:$JssorEasing$.$EaseLinear},$Assembly:2049,$Opacity:2},
-  {$Duration:500,$Delay:30,$Cols:8,$Rows:4,$Clip:15,$SlideOut:true,$Formation:$JssorSlideshowFormations$.$FormationZigZag,$Easing:$JssorEasing$.$EaseOutQuad}
-  ];
-  var options = {
-      $AutoPlay: true,
-      $SlideshowOptions: {
-        $Class: $JssorSlideshowRunner$,
-        $Transitions: _SlideshowTransitions,
-        $TransitionsOrder: 0, // random
-        $ShowLink: false,
-        $Idle: 10000,
-        $PauseOnHover: 0,
-        $ArrowKeyNavigation: 0
-      }
-  };
-  var jssor_slider1 = new $JssorSlider$('slider1_container', options);
 });
 </script>
 {% endblock %}

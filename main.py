@@ -51,6 +51,18 @@ def ajax_update():
     if not d:
         d = {'error': 'empty'}
 
+    if d['layout'] == 'layout2': # 自动下载模式
+        data = d['data']
+        tag = data['tag']
+        images = data['images']
+        # auto download and save to config file & cache
+        images = []
+        for name in ["01.jpg", "02.jpg", "03.jpg"]:
+            images.append("/" + os.path.join(app.config['UPLOAD_FOLDER'],
+                            'layout2', name))
+        d['data'] = {'tag': 'xxx', 'images': images }
+
+
     return json.dumps(d)
 
 @app.route('/detail/')
@@ -122,7 +134,7 @@ def delivery_layout1():
                     with open('delivery.json', 'w') as config_file:
                         json.dump(d, config_file)
                     cache = SimpleCache()
-                    cache.set('layout', d)
+                    cache.set('layout', d, 0)
                     return redirect(url_for('detail'))
     return render_template('delivery_layout1.html', error=error)
 
@@ -134,11 +146,10 @@ def delivery_layout2():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        # check if the post request has the file part
         d = {'layout': 'layout2', 'data': {'tag': '', 'images': []}}
         with open('delivery.json', 'w') as config_file:
             json.dump(d, config_file)
         cache = SimpleCache()
-        cache.set('layout', d)
+        cache.set('layout', d, 0)
         return redirect(url_for('detail'))
     return render_template('delivery_layout2.html', error=error)
