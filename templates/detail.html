@@ -61,7 +61,7 @@ $(document).ready(function(){
                 $Transitions: _SlideshowTransitions,
                 $TransitionsOrder: 0, // random
                 $ShowLink: false,
-                $Idle: 10000,
+                $Idle: 30000,
                 $PauseOnHover: 0,
                 $ArrowKeyNavigation: 0
               }
@@ -83,7 +83,6 @@ $(document).ready(function(){
       success: function( settings ){
         if(!settings['error']){
           var layout = settings['layout'];
-          console.log('layout is ', layout);
           handler = handlers[layout];
           if (handler)
             handler(settings);
@@ -93,7 +92,7 @@ $(document).ready(function(){
   }
 
   update();
-  setInterval(update, 3000);
+  setInterval(update, 60000); // 1 minute
 });
 </script>
 {% endblock %}

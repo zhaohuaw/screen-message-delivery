@@ -9,6 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 from werkzeug.utils import secure_filename
 from werkzeug.contrib.cache import SimpleCache
 
+
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = set(['txt', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -29,10 +30,14 @@ app.config.update(dict(
     USERNAME='username',
     PASSWORD='password',
     UPLOAD_FOLDER=UPLOAD_FOLDER,
+    DOWNLOAD_INTERVAL=5*60, # 5 minutes
 ))
 app.config.from_envvar('SECRET_KEY', silent=True)
 app.config.from_envvar('USERNAME', silent=True)
 app.config.from_envvar('PASSWORD', silent=True)
+app.config.from_envvar('DOWNLOAD_INTERVAL', silent=True)
+
+cache = SimpleCache()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -41,7 +46,6 @@ def index():
 
 @app.route('/ajax/get/update/')
 def ajax_update():
-    cache = SimpleCache()
     settings = cache.get('settings')
 
     if not settings:
@@ -59,9 +63,10 @@ def ajax_update():
             settings = {'layout': 'layout2', 'data': data }
             with open('delivery.json', 'w') as config_file:
                 json.dump(settings, config_file)
-            cache = SimpleCache()
-            cache.set('settings', settings, 0)
-            cache.set('layout2_etag', data['etag'], 5)# timeout 5 seconds
+            cache.set('settings', settings, 0) # cache forever
+            cache.set('layout2_etag', data['etag'],
+                    app.config['DOWNLOAD_INTERVAL'])# timeout 5m
+            print 'file second'
     #elif settings['layout'] == 'layout1': # 单图主动设置
         #pass
     return json.dumps(settings)
@@ -135,7 +140,6 @@ def delivery_layout1():
                         save_to}}
                     with open('delivery.json', 'w') as config_file:
                         json.dump(settings , config_file)
-                    cache = SimpleCache()
                     cache.set('settings', settings , 0)
                     return redirect(url_for('detail'))
     return render_template('delivery_layout1.html', error=error)
@@ -151,7 +155,6 @@ def delivery_layout2():
         settings = {'layout': 'layout2', 'data': {'etag': '', 'images': []}}
         with open('delivery.json', 'w') as config_file:
             json.dump(settings, config_file)
-        cache = SimpleCache()
         cache.set('settings', settings, 0)
         return redirect(url_for('detail'))
     return render_template('delivery_layout2.html', error=error)
