@@ -42,28 +42,29 @@ def index():
 @app.route('/ajax/get/update/')
 def ajax_update():
     cache = SimpleCache()
-    d = cache.get('layout')
+    settings = cache.get('settings')
 
-    if not d:
+    if not settings:
         with open('delivery.json', 'r') as config_file:
-            d = json.load(config_file)
+            settings = json.load(config_file)
 
-    if not d:
-        d = {'error': 'empty'}
+    if not settings:
+        settings = {'error': 'empty'}
 
-    if d['layout'] == 'layout2': # 自动下载模式
-        data = d['data']
-        tag = data['tag']
-        images = data['images']
-        # auto download and save to config file & cache
-        images = []
-        for name in ["01.jpg", "02.jpg", "03.jpg"]:
-            images.append("/" + os.path.join(app.config['UPLOAD_FOLDER'],
-                            'layout2', name))
-        d['data'] = {'tag': 'xxx', 'images': images }
-
-
-    return json.dumps(d)
+    if settings['layout'] == 'layout2': # 自动下载模式
+        cached_etag = cache.get('layout2_etag')
+        if cached_etag != settings['data']['etag']: # 要重新下载
+            from  layout_handlers.layout2 import handler as h
+            data = h()
+            settings = {'layout': 'layout2', 'data': data }
+            with open('delivery.json', 'w') as config_file:
+                json.dump(settings, config_file)
+            cache = SimpleCache()
+            cache.set('settings', settings, 0)
+            cache.set('layout2_etag', data['etag'], 5)# timeout 5 seconds
+    #elif settings['layout'] == 'layout1': # 单图主动设置
+        #pass
+    return json.dumps(settings)
 
 @app.route('/detail/')
 def detail():
@@ -130,11 +131,12 @@ def delivery_layout1():
 
                     flash(u'文件上传成功。')
                     # save the config to a file and then store to cache
-                    d = {'layout': 'layout1', 'data': '/' + save_to}
+                    settings = {'layout': 'layout1', 'data': {'image': '/' +
+                        save_to}}
                     with open('delivery.json', 'w') as config_file:
-                        json.dump(d, config_file)
+                        json.dump(settings , config_file)
                     cache = SimpleCache()
-                    cache.set('layout', d, 0)
+                    cache.set('settings', settings , 0)
                     return redirect(url_for('detail'))
     return render_template('delivery_layout1.html', error=error)
 
@@ -146,10 +148,10 @@ def delivery_layout2():
         return redirect(url_for('login'))
 
     if request.method == 'POST':
-        d = {'layout': 'layout2', 'data': {'tag': '', 'images': []}}
+        settings = {'layout': 'layout2', 'data': {'etag': '', 'images': []}}
         with open('delivery.json', 'w') as config_file:
-            json.dump(d, config_file)
+            json.dump(settings, config_file)
         cache = SimpleCache()
-        cache.set('layout', d, 0)
+        cache.set('settings', settings, 0)
         return redirect(url_for('detail'))
     return render_template('delivery_layout2.html', error=error)

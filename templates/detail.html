@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% block body %}
+<h1>请先配置网络和发布模式</h1>
 {% endblock %}
 
 {% block page_scripts %}
@@ -7,31 +9,31 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-  var APPLYEDLAYOUT = {'layout': '', 'image': ''};
+  var LAYOUT_SETTINGS = {'layout': '', 'data': {}};
   
   handlers = {
-    layout1: function(data) {
-        var image = data['data'];
-        if (('layout1'!=APPLYEDLAYOUT['layout'] || image!=APPLYEDLAYOUT['data'])) {
-          APPLYEDLAYOUT['layout'] = 'layout1';
-          APPLYEDLAYOUT['data'] = image;
+    layout1: function(settings) {
+        var image = settings['data']['image'];
+        var curr_image = LAYOUT_SETTINGS['data']['image'] || '';
+        if ('layout1'!=LAYOUT_SETTINGS['layout'] || image!=curr_image) {
+          LAYOUT_SETTINGS['layout'] = 'layout1';
+          LAYOUT_SETTINGS['data']['image'] = image;
           $('#content').empty();
           $('body').css('background-image', 'url(' + image + ')').css("background-repeat", "no-repeat");
         }
     },
-    layout2: function(data) {
+    layout2: function(settings) {
         //slider show
         //Define an array of slideshow transition code
-        var data = data['data'];
-        var tag = data['tag'];
+        var data = settings['data'];
+        var etag = data['etag'];
+        var curr_etag = LAYOUT_SETTINGS['data']['etag'] || '';
         var images = data['images'];
-        if (('layout2'!=APPLYEDLAYOUT['layout'] || tag!=APPLYEDLAYOUT['data'])) {
+        if ('layout2'!=LAYOUT_SETTINGS['layout'] || etag!=curr_etag) {
           $('body').css('background-image', ''); //reset
-          APPLYEDLAYOUT['layout'] = 'layout2';
-          APPLYEDLAYOUT['data'] = tag;
 
-          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1300px; height: 620px;">'];
-          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 1300px; height: 620px;">');
+          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 4926px; height: 3037px;">'];
+          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 4926px; height: 3037px;">');
           for(var i=0,len=images.length; i<len; i++) {
             html_arr.push('<div><img u="image" src="');
             html_arr.push(images[i]);
@@ -66,6 +68,9 @@ $(document).ready(function(){
           };
 
           var jssor_slider1 = new $JssorSlider$('slider1_container', options);
+          LAYOUT_SETTINGS['layout'] = 'layout2';
+          LAYOUT_SETTINGS['data']['etag'] = etag;
+
         }
       }
   };
@@ -75,13 +80,13 @@ $(document).ready(function(){
     $.ajax({
       url: "/ajax/get/update/",
       dataType: "json",
-      success: function( data ){
-        if(!data['error']){
-          var layout = data['layout'];
+      success: function( settings ){
+        if(!settings['error']){
+          var layout = settings['layout'];
           console.log('layout is ', layout);
           handler = handlers[layout];
           if (handler)
-            handler(data);
+            handler(settings);
         }
       }
     });
