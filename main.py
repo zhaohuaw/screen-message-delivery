@@ -66,7 +66,6 @@ def ajax_update():
             cache.set('settings', settings, 0) # cache forever
             cache.set('layout2_etag', data['etag'],
                     app.config['DOWNLOAD_INTERVAL'])# timeout 5m
-            print 'file second'
     #elif settings['layout'] == 'layout1': # 单图主动设置
         #pass
     return json.dumps(settings)
