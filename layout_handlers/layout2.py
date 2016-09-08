@@ -9,6 +9,7 @@ base_url = 'http://www.yhcgzf.gov.cn/gzdt_9204/yybb/'
 headers = {'user-agent': 'Mozilla/5.0'}
 
 def handler():
+    print 'layout2 handler'
     response = requests.get(base_url, headers=headers)
     html_doc = response.text
     soup = BeautifulSoup(html_doc, "html.parser")

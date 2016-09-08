@@ -32,8 +32,8 @@ $(document).ready(function(){
         if ('layout2'!=LAYOUT_SETTINGS['layout'] || etag!=curr_etag) {
           $('body').css('background-image', ''); //reset
 
-          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 4926px; height: 3037px;">'];
-          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 4926px; height: 3037px;">');
+          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1920px; height: 1080px;">'];
+          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 1920px; height: 1080px;">');
           for(var i=0,len=images.length; i<len; i++) {
             html_arr.push('<div><img u="image" src="');
             html_arr.push(images[i]);
@@ -44,8 +44,7 @@ $(document).ready(function(){
           $('#content').empty().html(html_arr.join(''));
 
           var _SlideshowTransitions = [
-            //Fade
-            { $Duration: 1200, $Opacity: 2 }
+            { $Duration: 1200 }
           ];
 
           var options = {
