@@ -32,8 +32,8 @@ $(document).ready(function(){
         if ('layout2'!=LAYOUT_SETTINGS['layout'] || etag!=curr_etag) {
           $('body').css('background-image', ''); //reset
 
-          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1920px; height: 1080px;">'];
-          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 1920px; height: 1080px;">');
+          var html_arr = ['<div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 2560px; height: 1440px;">'];
+          html_arr.push('<div u="slides" style="cursor: move; position: absolute; overflow: hidden; left: 0px; top: 0px; width: 2560px; height: 1440px;">');
           for(var i=0,len=images.length; i<len; i++) {
             html_arr.push('<div><img u="image" src="');
             html_arr.push(images[i]);
