@@ -1,13 +1,13 @@
 #/bin/bash
 
 cd ~/workspace/screen-message-delivery/
-source ~/.envs/flask/bin/activate
+# comment out the following line if run in virtualenv
+#source ~/.envs/flask/bin/activate
 export FLASK_APP=main.py
 export FLASK_DEBUG=False
-flask run &
+flask run --host 0.0.0.0 &
 sleep 5s # waiting flask
 
-echo out while
 while [ true ]
 do
     #-o /dev/null throws away the usual output
@@ -25,4 +25,4 @@ do
     fi
 done
 
-google-chrome --kiosk http://127.0.0.1:5000/detail/
+chromium --noerrdialogs --kiosk http://127.0.0.1:5000/detail/
