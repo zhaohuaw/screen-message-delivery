@@ -44,12 +44,25 @@ $ sudo vi /etc/xdg/lxsession/LXDE-pi/autostart
 或者也可以将启动脚本添加到 `~/.config/lxsessionn/LXDE/autostart` 文件中。
 
 
-## 运行情况
+# 运行图
+
+## 树莓派
+
+![树莓派](static/screenshots/raspberry.jpg)
 
 ### 首页
 
+![首页](static/screenshots/homepage.jpg)
+
 ### 登录页
 
-### 消息分发页
+![登录页](static/screenshots/login.jpg)
 
-### 消息显示页
+### 消息类型设置页
+
+![消息类型设置页](static/screenshots/settings.jpg)
+
+### 屏幕显示页
+
+![屏幕显示页](static/screenshots/screen.jpg)
+
