@@ -19,7 +19,8 @@ def handler():
 
     hrefs = []
     for a in links:
-        hrefs.append(a.attrs['href'][2:]) # u'./201609/t20160905_509522.html'--> '201609/t20160905_509522.html'
+        if not a.attrs['href'].startswith('index'):
+            hrefs.append(a.attrs['href'][2:]) # u'./201609/t20160905_509522.html'--> '201609/t20160905_509522.html'
 
     hrefs.sort(reverse=True)
 

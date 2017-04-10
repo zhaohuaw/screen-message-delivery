@@ -66,3 +66,9 @@ $ sudo vi /etc/xdg/lxsession/LXDE-pi/autostart
 
 ![屏幕显示页](static/screenshots/screen.jpg)
 
+
+## 维护
+
+```bash
+$ ssh pi@server-ip # default pwd: raspberry
+```
